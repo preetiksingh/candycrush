@@ -5,6 +5,7 @@
 #board {
   margin :0 auto;
   width:100vmin;
+  text-align: center;
 
   .row {
     height: 9vmin;
@@ -14,6 +15,26 @@
       height:9vmin;
       background-color: #ecf0f1;
       border:1px solid #cbd0d3;
+      
+      i {
+        font-size: 8vmin;
+        line-height:10vmin;
+
+        &.fa-heart {
+          color: #c0392b;
+        }
+        &.fa-star {
+          color: #8e44ad;
+        }
+
+        &.fa-square {
+          color: #16a085;
+        }
+
+         &.fa-circle {
+          color: blue;
+        }
+      }
 
     }
   }

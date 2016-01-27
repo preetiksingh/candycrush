@@ -3,7 +3,8 @@
 
 #board {
   margin: 0 auto;
-  width: 100vmin; }
+  width: 100vmin;
+  text-align: center; }
   #board .row {
     height: 9vmin; }
     #board .row .cell {
@@ -12,3 +13,14 @@
       height: 9vmin;
       background-color: #ecf0f1;
       border: 1px solid #cbd0d3; }
+      #board .row .cell i {
+        font-size: 8vmin;
+        line-height: 10vmin; }
+        #board .row .cell i.fa-heart {
+          color: #c0392b; }
+        #board .row .cell i.fa-star {
+          color: #8e44ad; }
+        #board .row .cell i.fa-square {
+          color: #16a085; }
+        #board .row .cell i.fa-circle {
+          color: blue; }
