@@ -33,23 +33,45 @@ Game = {
     selector += "[data-col-no='" + colNo + "']";
     return $(selector);
   },
+  coordinatesOfCell: function(cell) {
+    var colNo, rowNo;
+    rowNo = parseInt(cell.dataset.rowNo);
+    colNo = parseInt(cell.dataset.colNo);
+    return [rowNo, colNo];
+  },
   highlightCell: function(cell) {
     return $(cell).children('i').addClass('jello');
   },
-  selectCell: function(cell) {
-    var colNo, rowNo;
+  handleCellClick: function(cell) {
+    var absDiff, colNo, coords, orgColNo, orgRowNo, rowNo;
     if (Game.selectedCell === null) {
-      Game.selectedCell = cell;
-      $(cell).children('i').addClass('flash');
-      colNo = parseInt(cell.dataset.colNo);
-      rowNo = parseInt(cell.dataset.rowNo);
-      Game.highlightCell(Game.fetchCell(rowNo - 1, colNo));
-      Game.highlightCell(Game.fetchCell(rowNo + 1, colNo));
-      Game.highlightCell(Game.fetchCell(rowNo, colNo - 1));
-      return Game.highlightCell(Game.fetchCell(rowNo, colNo + 1));
+      return Game.selectCell(cell);
     } else {
-      return Game.deselectCell();
+      coords = Game.coordinatesOfCell(cell);
+      rowNo = coords[0];
+      colNo = coords[1];
+      coords = Game.coordinatesOfCell(Game.selectedCell);
+      orgRowNo = coords[0];
+      orgColNo = coords[1];
+      absDiff = [Math.abs(rowNo - orgRowNo), Math.abs(colNo - orgColNo)].sort();
+      if (absDiff[0] === 0 && absDiff[1] === 1) {
+        return console.log("Neighbor clicked");
+      } else {
+        return Game.deselectCell();
+      }
     }
+  },
+  selectCell: function(cell) {
+    var colNo, coords, rowNo;
+    Game.selectedCell = cell;
+    $(cell).children('i').addClass('flash');
+    coords = Game.coordinatesOfCell(cell);
+    rowNo = coords[0];
+    colNo = coords[1];
+    Game.highlightCell(Game.fetchCell(rowNo - 1, colNo));
+    Game.highlightCell(Game.fetchCell(rowNo + 1, colNo));
+    Game.highlightCell(Game.fetchCell(rowNo, colNo - 1));
+    return Game.highlightCell(Game.fetchCell(rowNo, colNo + 1));
   },
   deselectCell: function() {
     $('.cell i').removeClass('jello').removeClass('flash');
@@ -57,7 +79,7 @@ Game = {
   },
   bindCellsForClick: function() {
     return $('.cell').click(function() {
-      return Game.selectCell(this);
+      return Game.handleCellClick(this);
     });
   },
   checkMatches: function() {
