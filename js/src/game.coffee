@@ -1,5 +1,5 @@
 Game = 
-  shapes: ["heart", "star", "square", "flash", "circle"]
+  shapes: ["heart", "star", "square", "flash", "circle","rocket", "car"]
   randomShapeClass: ->
     "fa-" + Game.shapes[Math.floor(Math.random()*Game.shapes.length)]
   init: ->

@@ -23,4 +23,8 @@
         #board .row .cell i.fa-square {
           color: #16a085; }
         #board .row .cell i.fa-circle {
-          color: blue; }
+          color: #2c3e50; }
+        #board .row .cell i.fa-rocket {
+          color: #d35400; }
+        #board .row .cell i.fa-car {
+          color: #f1c40f; }
