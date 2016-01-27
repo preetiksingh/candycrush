@@ -1,0 +1,22 @@
+{
+  "name": "candycrush",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "preetiksingh <preetisingh41451@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/preetiksingh/candycrush",
+  "moduleType": [
+    "es6",
+    "node"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
