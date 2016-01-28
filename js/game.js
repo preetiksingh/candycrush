@@ -23,8 +23,8 @@ Game = {
       });
       return rowNo++;
     });
-    Game.rowsCount = rowNo;
-    return Game.columnsCount = colNo;
+    Game.rowsCount = rowNo - 1;
+    return Game.columnsCount = colNo - 1;
   },
   fetchCell: function(rowNo, colNo) {
     var selector;
@@ -55,11 +55,28 @@ Game = {
       orgColNo = coords[1];
       absDiff = [Math.abs(rowNo - orgRowNo), Math.abs(colNo - orgColNo)].sort();
       if (absDiff[0] === 0 && absDiff[1] === 1) {
-        return console.log("Neighbor clicked");
-      } else {
-        return Game.deselectCell();
+        Game.swapCells(Game.selectedCell, cell);
       }
+      return Game.deselectCell();
     }
+  },
+  candyInCell: function(cell) {
+    return $(cell).children('i');
+  },
+  shapeClassOfCandy: function(candy) {
+    return candy.attr('class').split(" ").find(function(className) {
+      return className.match(/fa\-/) != null;
+    });
+  },
+  swapCells: function(c1, c2) {
+    var child1, child2, className1, className2;
+    child1 = Game.candyInCell(c1);
+    child2 = Game.candyInCell(c2);
+    className1 = Game.shapeClassOfCandy(child1);
+    className2 = Game.shapeClassOfCandy(child2);
+    child1.removeClass(className1).addClass(className2);
+    child2.removeClass(className2).addClass(className1);
+    return Game.checkMatches();
   },
   selectCell: function(cell) {
     var colNo, coords, rowNo;
@@ -83,7 +100,32 @@ Game = {
     });
   },
   checkMatches: function() {
-    return console.log("Checking matches");
+    var checkingShape, currentCandy, currentCell, currentColNo, currentLength, currentRowNo, currentShape, results;
+    console.log("Checking matches");
+    currentRowNo = Game.rowsCount;
+    currentColNo = 1;
+    checkingShape = null;
+    currentLength = 0;
+    results = [];
+    while (currentColNo <= Game.columnsCount) {
+      currentCell = Game.fetchCell(currentRowNo, currentColNo);
+      currentCandy = Game.candyInCell(currentCell);
+      currentShape = Game.shapeClassOfCandy(currentCandy);
+      if (checkingShape == null) {
+        checkingShape = currentShape;
+      }
+      if (checkingShape = currentShape) {
+        currentLength++;
+      } else {
+        if (currentLength > 2) {
+          console.log("The length is more: " + currentLength);
+        }
+        checkingShape = currentShape;
+        currentLength = 1;
+      }
+      results.push(currentColNo++);
+    }
+    return results;
   },
   init: function() {
     Game.rowsCount = 0;

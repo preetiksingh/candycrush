@@ -16,8 +16,8 @@ Game =
         cell.dataset.colNo = colNo
         colNo++
       rowNo++
-    Game.rowsCount = rowNo
-    Game.columnsCount = colNo
+    Game.rowsCount = rowNo - 1
+    Game.columnsCount = colNo - 1
   fetchCell: (rowNo, colNo) ->
     selector = ".cell"
     selector += "[data-row-no='#{rowNo}']"
@@ -41,9 +41,29 @@ Game =
       orgColNo = coords[1]
       absDiff = [Math.abs(rowNo - orgRowNo), Math.abs(colNo - orgColNo)].sort()
       if absDiff[0] == 0 && absDiff[1] == 1
-        console.log "Neighbor clicked"
-      else
-        Game.deselectCell()
+        Game.swapCells(Game.selectedCell, cell)
+      Game.deselectCell()
+
+  candyInCell: (cell) ->
+    $(cell).children('i')
+  shapeClassOfCandy: (candy) ->
+    candy
+    .attr('class')
+    .split(" ")
+    .find((className) -> className.match(/fa\-/)?)
+
+
+  swapCells:(c1, c2) ->
+    child1 = Game.candyInCell(c1)
+    child2 = Game.candyInCell(c2)
+    # Get fa-* className of first child
+    className1 = Game.shapeClassOfCandy(child1)
+    # Get fa-* className of second child
+    className2 = Game.shapeClassOfCandy(child2)
+    # Interchange classes
+    child1.removeClass(className1).addClass(className2)
+    child2.removeClass(className2).addClass(className1)
+    Game.checkMatches()
   selectCell: (cell) ->
     Game.selectedCell = cell
     $(cell).children('i').addClass('flash')
@@ -62,6 +82,29 @@ Game =
       Game.handleCellClick(@)
   checkMatches: ->
     console.log "Checking matches"
+    currentRowNo = Game.rowsCount
+    currentColNo = 1
+    checkingShape = null
+    currentLength = 0
+
+    while currentColNo <= Game.columnsCount
+      currentCell = Game.fetchCell(currentRowNo, currentColNo)
+      currentCandy = Game.candyInCell(currentCell)
+      currentShape = Game.shapeClassOfCandy(currentCandy)
+      checkingShape = currentShape unless checkingShape?
+      if checkingShape = currentShape
+        currentLength++
+      else
+        if currentLength > 2 
+          console.log "The length is more: #{currentLength}"
+          #Remove the matching element
+          #Bring down the elements above the remove elements
+          #Populate above blank cells with random shapes
+          #Break down the check process 
+        checkingShape = currentShape
+        currentLength = 1
+      currentColNo++
+
   init: ->
     Game.rowsCount = 0
     Game.columnsCount = 0
@@ -73,7 +116,6 @@ Game =
 
 $ ->
   Game.init()
-
 #example for each function 
 
 # each is a function which takes two parameters.First is an array and the second is a 
